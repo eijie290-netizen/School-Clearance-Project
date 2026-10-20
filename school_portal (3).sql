@@ -1,15 +1,7 @@
 CREATE DATABASE school_portal;
 USE school_portal;
 
-CREATE TABLE admin_account (
-    admin_id   INT          NOT NULL,
-    username   VARCHAR(30)  NOT NULL,
-    password   VARCHAR(30)  NOT NULL,
-    full_name  VARCHAR(50)  NOT NULL,
-    email      VARCHAR(50),
-    role       VARCHAR(20),
-    PRIMARY KEY (admin_id)
-);
+CREATE TABLE Admin_Account (Admin_ID int not null primary key, Username varchar (30) not null, Password varchar (30) not null, Full_Name varchar(50) not null, Email varchar(50) not null, Role varchar(20));
 
 CREATE TABLE student (
     student_id        VARCHAR(10)  NOT NULL,
