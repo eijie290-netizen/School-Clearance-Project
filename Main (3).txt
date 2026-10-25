@@ -5,6 +5,15 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class Main {
+    private static final int MAX_LOGIN_ATTEMPTS = 3;
+    private static int loginAttempts = 0;
+    private static String adminPassword = "Borlasa123";
+    
+    public static boolean changeAdminPassword(String currentPassword, String newPassword){
+        if(!adminPassword.equals(currentPassword)) return false;
+        adminPassword = newPassword;
+        return true;
+    }
     private static final Color NAVY = new Color(35, 63, 112);
     private static final Color BLUE = new Color(8, 76, 166);
     private static final Color TEXT = Color.BLACK;
@@ -60,7 +69,7 @@ public class Main {
         c.insets = new Insets(0, 0, 5, 0);
         card.add(schoolName, c);
 
-        JLabel heading = new JLabel("Student Portal Login", SwingConstants.CENTER);
+        JLabel heading = new JLabel("Clearance Tracking Portal Login", SwingConstants.CENTER);
         heading.setFont(new Font("SansSerif", Font.BOLD, 19));
         heading.setForeground(TEXT);
         c.gridy++;
@@ -118,20 +127,28 @@ public class Main {
         Runnable authenticate = () -> {
             String user = username.getText().trim();
             String pass = new String(password.getPassword());
-
-            // Only the existing administrator account can log in.
-            if ("Ericka".equals(user) && "Borlasa123".equals(pass)) {
+            
+            if ("Ericka".equals(user) && adminPassword.equals(pass)) {
                 frame.dispose();
                 new SchoolPortal();
             } else {
+                loginAttempts++;
+                int remaining = MAX_LOGIN_ATTEMPTS-loginAttempts;
+                if (remaining>0){
                 JOptionPane.showMessageDialog(frame,
-                        "Incorrect username or password. Please try again.",
+                        "Incorrect username or password. Attempts remaining." + remaining,
                         "Login Failed", JOptionPane.ERROR_MESSAGE);
                 password.setText("");
                 password.requestFocusInWindow();
+            }else{
+                    JOptionPane.showMessageDialog(frame,
+                            "You have used all 3 login attempts. The system will now close.",
+                            "Login Locked", JOptionPane.ERROR_MESSAGE);
+                    frame.dispose();
+                    System.exit(0);
+                }
             }
         };
-
         login.addActionListener(e -> authenticate.run());
         password.addActionListener(e -> authenticate.run());
 
