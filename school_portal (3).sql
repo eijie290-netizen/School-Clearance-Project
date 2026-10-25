@@ -1,62 +1,38 @@
+-- DATABASE
 CREATE DATABASE school_portal;
 USE school_portal;
+-- TABLES
 CREATE TABLE Admin_Account (
-    Admin_ID   int not null primary key,
-    Username   varchar(30) not null,
-    Password   varchar(30) not null,
-    Full_Name  varchar(50) not null,
-    Email      varchar(50),
-    Role       varchar(20));
-
+    Admin_ID int not null primary key, Username varchar(30) not null, Password varchar(30) not null,
+    Full_Name varchar(50) not null, Email varchar(50), Role varchar(20)
+);
 CREATE TABLE Student (
-    Student_ID        varchar(10) not null primary key,
-    First_Name        varchar(30) not null,
-    Last_Name         varchar(30) not null,
-    Course            varchar(10),
-    Year_Level        varchar(10),
-    Gender            varchar(20),
-    Birth_Date        date,
-    Email             varchar(50),
-    Contact           varchar(15),
-    Address           varchar(100),
-    Guardian          varchar(50),
-    Relationship      varchar(20),
-    Guardian_Contact  varchar(15));
-
+    Student_ID varchar(10) not null primary key, First_Name varchar(30) not null,
+    Last_Name varchar(30) not null, Course varchar(10), Year_Level varchar(10), Gender varchar(20),
+    Birth_Date date, Email varchar(50), Contact varchar(15), Address varchar(100), Guardian varchar(50),
+    Relationship varchar(20), Guardian_Contact varchar(15)
+);
 CREATE TABLE Clearance (
-    Clearance_ID           varchar(10) not null primary key,
-    Student_ID             varchar(10) not null,
-    Admin_ID               int not null,
-    Registrar_Status       varchar(10) not null,
-    Library_Status         varchar(10) not null,
-    Accounting_Status      varchar(10) not null,
-    Clinic_Status          varchar(10) not null,
-    Guidance_Status        varchar(10) not null,
-    Student_Affairs_Status varchar(10) not null,
-    Overall_Status         varchar(10) not null,
-    Progress               int not null,
+    Clearance_ID varchar(10) not null primary key, Student_ID varchar(10) not null, Admin_ID int not null,
+    Registrar_Status varchar(10) not null, Library_Status varchar(10) not null,
+    Accounting_Status varchar(10) not null, Clinic_Status varchar(10) not null,
+    Guidance_Status varchar(10) not null, Student_Affairs_Status varchar(10) not null,
+    Overall_Status varchar(10) not null, Progress int not null,
     FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID),
-    FOREIGN KEY (Admin_ID) REFERENCES Admin_Account(Admin_ID));
-
+    FOREIGN KEY (Admin_ID) REFERENCES Admin_Account(Admin_ID)
+);
 CREATE TABLE Payment (
-    Receipt_No    varchar(10) not null primary key,
-    Student_ID    varchar(10) not null,
-    Admin_ID      int not null,
-    Description   varchar(50) not null,
-    Amount        decimal(10,2) not null,
-    Payment_Date  date not null,
-    Status        varchar(10) not null,
-    FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID),
-    FOREIGN KEY (Admin_ID) REFERENCES Admin_Account(Admin_ID));
-
+    Receipt_No varchar(10) not null primary key, Student_ID varchar(10) not null, Admin_ID int not null,
+    Description varchar(50) not null, Amount decimal(10,2) not null, Payment_Date date not null,
+    Status varchar(10) not null, FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID),
+    FOREIGN KEY (Admin_ID) REFERENCES Admin_Account(Admin_ID)
+);
 CREATE TABLE Announcement (
-    Announcement_ID  varchar(10) not null primary key,
-    Admin_ID         int not null,
-    Title            varchar(60) not null,
-    Message          varchar(255) not null,
-    Date_Posted      date not null,
-    FOREIGN KEY (Admin_ID) REFERENCES Admin_Account(Admin_ID));
-
+    Announcement_ID varchar(10) not null primary key, Admin_ID int not null, Title varchar(60) not null,
+    Message varchar(255) not null, Date_Posted date not null,
+    FOREIGN KEY (Admin_ID) REFERENCES Admin_Account(Admin_ID)
+);
+-- SAMPLE DATA
 INSERT INTO Admin_Account VALUES (1, 'Ericka', 'Borlasa123', 'Ericka Magday', 'magday28@school.edu', 'Administrator');
 INSERT INTO Student VALUES ('2024-001', 'Maria', 'Santos', 'BSIT', '2nd Year', 'Female', '2005-04-12', 'maria.santos@school.edu', '09171234567', 'San Jose del Monte, Bulacan', 'Liza Santos', 'Mother', '09179876543');
 INSERT INTO Student VALUES ('2024-002', 'Juan', 'Dela Cruz', 'BSBA', '2nd Year', 'Male', '2004-11-02', 'juan.delacruz@school.edu', '09181234567', 'Quezon City', 'Ramon Dela Cruz', 'Father', '09189998877');
@@ -94,163 +70,70 @@ INSERT INTO Payment VALUES ('2026-013', '2024-003', 1, 'Student Fee', 1200.00, '
 INSERT INTO Announcement VALUES ('AN-001', 1, 'No Classes on Feb 21', 'There will be no classes on February 21. Please check official school updates.', '2026-02-18');
 INSERT INTO Announcement VALUES ('AN-002', 1, 'Enrollment Schedule', 'Enrollment for the next term starts on March 3, 2026.', '2026-02-16');
 INSERT INTO Announcement VALUES ('AN-003', 1, 'Readmission Policy', 'Please review the readmission policy for school year 2026-2027.', '2026-02-12');
-
-SELECT COUNT(*) AS "Total Students" FROM Student;
-
+-- REPORTS / QUERIES
+SELECT COUNT(*) AS "Total Students"
+FROM Student;
 SELECT COUNT(*) AS "Pending Clearance"
-FROM Clearance
-WHERE Overall_Status = 'Pending';
+FROM Clearance WHERE Overall_Status = 'Pending';
 SELECT COUNT(*) AS "Unpaid Payments"
-FROM Payment
-WHERE Status = 'Pending';
-
-SELECT COUNT(*) AS "Total Announcements" FROM Announcement;
-
-SELECT Student_ID AS "Student ID",
-       CONCAT(First_Name, ' ', Last_Name) AS "Student Name",
-       Course AS "Course",
-       Year_Level AS "Year Level",
-       Gender AS "Gender",
-       Email AS "Email",
-       Contact AS "Contact"
-FROM Student
-ORDER BY Last_Name ASC, First_Name ASC;
-
-SELECT Student_ID AS "Student ID",
-       CONCAT(First_Name, ' ', Last_Name) AS "Student Name",
-       Guardian AS "Guardian",
-       Relationship AS "Relationship",
-       Guardian_Contact AS "Guardian Contact"
-FROM Student
-ORDER BY Last_Name ASC;
-
-SELECT Student_ID AS "Student ID",
-       CONCAT(First_Name, ' ', Last_Name) AS "Student Name",
-       Address AS "Address"
-FROM Student
-WHERE Address LIKE '%Bulacan%'
-ORDER BY Last_Name ASC;
-
-SELECT Student_ID AS "Student ID",
-       CONCAT(First_Name, ' ', Last_Name) AS "Student Name",
-       Course AS "Course"
-FROM Student
-WHERE Course IN ('BSIT', 'BSN', 'BSA')
-ORDER BY Course ASC, Last_Name ASC;
-
-SELECT Student_ID AS "Student ID",
-       CONCAT(UPPER(Last_Name), ', ', First_Name) AS "Student Name",
-       LOWER(Email) AS "Email"
-FROM Student
-ORDER BY Last_Name ASC;
-
-SELECT DISTINCT Course AS "Course" FROM Student ORDER BY Course ASC;
+FROM Payment WHERE Status = 'Pending';
+SELECT COUNT(*) AS "Total Announcements"
+FROM Announcement;
+SELECT Student_ID AS "Student ID", CONCAT(First_Name, ' ', Last_Name) AS "Student Name", Course AS "Course",
+    Year_Level AS "Year Level", Gender AS "Gender", Email AS "Email", Contact AS "Contact"
+FROM Student ORDER BY Last_Name ASC, First_Name ASC;
+SELECT Student_ID AS "Student ID", CONCAT(First_Name, ' ', Last_Name) AS "Student Name",
+    Guardian AS "Guardian", Relationship AS "Relationship", Guardian_Contact AS "Guardian Contact"
+FROM Student ORDER BY Last_Name ASC;
+SELECT Student_ID AS "Student ID", CONCAT(First_Name, ' ', Last_Name) AS "Student Name", Address AS "Address"
+FROM Student WHERE Address LIKE '%Bulacan%' ORDER BY Last_Name ASC;
+SELECT Student_ID AS "Student ID", CONCAT(First_Name, ' ', Last_Name) AS "Student Name", Course AS "Course"
+FROM Student WHERE Course IN ('BSIT', 'BSN', 'BSA') ORDER BY Course ASC, Last_Name ASC;
+SELECT Student_ID AS "Student ID", CONCAT(UPPER(Last_Name), ', ', First_Name) AS "Student Name",
+    LOWER(Email) AS "Email"
+FROM Student ORDER BY Last_Name ASC;
+SELECT DISTINCT Course AS "Course"
+FROM Student ORDER BY Course ASC;
 SELECT Course AS "Course", COUNT(*) AS "No. of Students"
-FROM Student
-GROUP BY Course
-ORDER BY COUNT(*) DESC;
-
+FROM Student GROUP BY Course ORDER BY COUNT(*) DESC;
 SELECT Year_Level AS "Year Level", COUNT(*) AS "No. of Students"
-FROM Student
-GROUP BY Year_Level
-ORDER BY Year_Level ASC;
-
+FROM Student GROUP BY Year_Level ORDER BY Year_Level ASC;
 SELECT Course AS "Course", COUNT(*) AS "No. of Students"
-FROM Student
-GROUP BY Course
-HAVING COUNT(*) > 1
-ORDER BY Course ASC;
-
-SELECT Clearance_ID AS "Clearance ID",
-       Student_ID AS "Student ID",
-       Registrar_Status AS "Registrar",
-       Library_Status AS "Library",
-       Accounting_Status AS "Accounting",
-       Clinic_Status AS "Clinic",
-       Guidance_Status AS "Guidance",
-       Student_Affairs_Status AS "Student Affairs",
-       Overall_Status AS "Overall",
-       Progress AS "Progress (%)"
-FROM Clearance
-ORDER BY Clearance_ID ASC;
-
+FROM Student GROUP BY Course HAVING COUNT(*) > 1 ORDER BY Course ASC;
+SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Registrar_Status AS "Registrar",
+    Library_Status AS "Library", Accounting_Status AS "Accounting", Clinic_Status AS "Clinic",
+    Guidance_Status AS "Guidance", Student_Affairs_Status AS "Student Affairs", Overall_Status AS "Overall",
+    Progress AS "Progress (%)"
+FROM Clearance ORDER BY Clearance_ID ASC;
 SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Progress AS "Progress (%)"
-FROM Clearance
-WHERE Overall_Status = 'Cleared';
+FROM Clearance WHERE Overall_Status = 'Cleared';
 SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Progress AS "Progress (%)"
-FROM Clearance
-WHERE Overall_Status = 'Pending'
-ORDER BY Progress ASC;
-
+FROM Clearance WHERE Overall_Status = 'Pending' ORDER BY Progress ASC;
 SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Progress AS "Progress (%)"
-FROM Clearance
-WHERE Overall_Status = 'Pending' AND Progress BETWEEN 50 AND 83
-ORDER BY Progress DESC;
-
-SELECT Clearance_ID AS "Clearance ID",
-       Student_ID AS "Student ID",
-       Accounting_Status AS "Accounting",
-       Clinic_Status AS "Clinic"
-FROM Clearance
-WHERE Accounting_Status = 'Pending' OR Clinic_Status = 'Pending'
-ORDER BY Student_ID ASC;
-
-SELECT Overall_Status AS "Overall Status",
-       COUNT(*) AS "No. of Students",
-       AVG(Progress) AS "Average Progress"
-FROM Clearance
-GROUP BY Overall_Status;
-
+FROM Clearance WHERE Overall_Status = 'Pending' AND Progress BETWEEN 50 AND 83 ORDER BY Progress DESC;
+SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Accounting_Status AS "Accounting",
+    Clinic_Status AS "Clinic"
+FROM Clearance WHERE Accounting_Status = 'Pending' OR Clinic_Status = 'Pending' ORDER BY Student_ID ASC;
+SELECT Overall_Status AS "Overall Status", COUNT(*) AS "No. of Students", AVG(Progress) AS "Average Progress"
+FROM Clearance GROUP BY Overall_Status;
 SELECT MIN(Progress) AS "Lowest Progress", MAX(Progress) AS "Highest Progress"
 FROM Clearance;
-
-SELECT Receipt_No AS "Receipt No.",
-       Student_ID AS "Student ID",
-       Description AS "Description",
-       Amount AS "Amount (PHP)",
-       Payment_Date AS "Date",
-       Status AS "Status"
-FROM Payment
-ORDER BY Payment_Date ASC;
-
+SELECT Receipt_No AS "Receipt No.", Student_ID AS "Student ID", Description AS "Description",
+    Amount AS "Amount (PHP)", Payment_Date AS "Date", Status AS "Status"
+FROM Payment ORDER BY Payment_Date ASC;
 SELECT Receipt_No AS "Receipt No.", Description AS "Description", Amount AS "Amount (PHP)"
-FROM Payment
-WHERE Amount BETWEEN 1800 AND 2500
-ORDER BY Amount DESC;
-SELECT Status AS "Status",
-       COUNT(*) AS "No. of Receipts",
-       SUM(Amount) AS "Total Amount",
-       AVG(Amount) AS "Average Amount"
-FROM Payment
-GROUP BY Status;
-
+FROM Payment WHERE Amount BETWEEN 1800 AND 2500 ORDER BY Amount DESC;
+SELECT Status AS "Status", COUNT(*) AS "No. of Receipts", SUM(Amount) AS "Total Amount",
+    AVG(Amount) AS "Average Amount"
+FROM Payment GROUP BY Status;
 SELECT Description AS "Fee Type", SUM(Amount) AS "Total Collected"
-FROM Payment
-WHERE Status = 'Paid'
-GROUP BY Description
-HAVING SUM(Amount) > 5000
-ORDER BY SUM(Amount) DESC;
+FROM Payment WHERE Status = 'Paid' GROUP BY Description HAVING SUM(Amount) > 5000 ORDER BY SUM(Amount) DESC;
 SELECT Student_ID AS "Student ID", SUM(Amount) AS "Pending Balance"
-FROM Payment
-WHERE Status = 'Pending'
-GROUP BY Student_ID
-ORDER BY SUM(Amount) DESC;
-
+FROM Payment WHERE Status = 'Pending' GROUP BY Student_ID ORDER BY SUM(Amount) DESC;
 SELECT Student_ID AS "Student ID", SUM(Amount) AS "Pending Balance"
-FROM Payment
-WHERE Status = 'Pending'
-GROUP BY Student_ID
-HAVING SUM(Amount) > 2000
-ORDER BY SUM(Amount) DESC;
-
-SELECT SUM(Amount) AS "Total Payments",
-       MIN(Amount) AS "Lowest Payment",
-       MAX(Amount) AS "Highest Payment"
+FROM Payment WHERE Status = 'Pending' GROUP BY Student_ID HAVING SUM(Amount) > 2000 ORDER BY SUM(Amount) DESC;
+SELECT SUM(Amount) AS "Total Payments", MIN(Amount) AS "Lowest Payment", MAX(Amount) AS "Highest Payment"
 FROM Payment;
-
-SELECT Announcement_ID AS "Announcement ID",
-       Title AS "Title",
-       Message AS "Message",
-       Date_Posted AS "Date Posted"
-FROM Announcement
-ORDER BY Date_Posted DESC;
+SELECT Announcement_ID AS "Announcement ID", Title AS "Title", Message AS "Message",
+    Date_Posted AS "Date Posted"
+FROM Announcement ORDER BY Date_Posted DESC;
