@@ -111,10 +111,7 @@ public class SchoolPortal extends JFrame {
          payments.add(new Student.PaymentRecord("2026-008", "2024-008", ADMIN_ID, "Miscellaneous Fee", 1800.00, "2026-02-18", "Paid"));
          payments.add(new Student.PaymentRecord("2026-009", "2024-009", ADMIN_ID, "Student Fee", 1200.00, "2026-02-19", "Pending"));
          payments.add(new Student.PaymentRecord("2026-010", "2024-010", ADMIN_ID, "Laboratory Fee", 2500.00, "2026-02-20", "Paid"));
-         payments.add(new Student.PaymentRecord("2026-011", "2024-007", ADMIN_ID, "Laboratory Fee", 2500.00, "2026-02-21", "Paid"));
-         payments.add(new Student.PaymentRecord("2026-012", "2024-005", ADMIN_ID, "Miscellaneous Fee", 1800.00, "2026-02-22", "Pending"));
-         payments.add(new Student.PaymentRecord("2026-013", "2024-003", ADMIN_ID, "Student Fee", 1200.00, "2026-02-23", "Pending"));
-
+        
         announcements.add(new Student.AnnouncementRecord("AN-001", ADMIN_ID, "No Classes on Feb 21",
                 "There will be no classes on February 21. Please check official school updates.",
                 "2026-02-18"));
