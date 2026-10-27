@@ -50,7 +50,6 @@ public class Student extends Person {
         return "Student";
     }
 
-// NESTED CLASS: stores one student's clearance record and office statuses.
     public static class ClearanceRecord {
         private String clearanceID;
         private String studentID;
@@ -58,7 +57,6 @@ public class Student extends Person {
         private String registrarStatus, libraryStatus, accountingStatus;
         private String clinicStatus, guidanceStatus, studentAffairsStatus;
         private String overallStatus;
-// CONSTRUCTOR: creates a clearance record and initializes each office status as Pending.
          public ClearanceRecord(String clearanceID, String studentID, int adminID) {
              this.clearanceID = clearanceID;
              this.studentID = studentID;
@@ -77,7 +75,6 @@ public class Student extends Person {
          public String getGuidanceStatus() { return guidanceStatus; }
          public String getStudentAffairsStatus() { return studentAffairsStatus; }
          public String getOverallStatus() { return overallStatus; }
-// CONTROL FLOW: switch selects which office status to update based on the office name.
          public void setStatus(String office, String status) {
              switch (office) {
                  case "Registrar": registrarStatus = status; break;
@@ -90,7 +87,6 @@ public class Student extends Person {
              }
              updateOverallStatus();
          }
-// ENCAPSULATION / CALCULATION: calculates the percentage of offices marked Cleared.
          public int getProgress() {
              int complete = 0;
              String[] statuses = {registrarStatus, libraryStatus, accountingStatus,
@@ -100,13 +96,11 @@ public class Student extends Person {
              }
              return (complete * 100) / statuses.length;
          }
-// PRIVATE HELPER METHOD: updates the overall status based on the clearance progress.
          private void updateOverallStatus() {
              overallStatus = getProgress() == 100 ? "Cleared" : "Pending";
          }
     }
 
-// NESTED CLASS: represents a student's payment/receipt details.
     public static class PaymentRecord {
         private String receiptNo;
         private String studentID;
@@ -135,7 +129,6 @@ public class Student extends Person {
          public void setStatus(String status) { this.status = status; }
     }
 
-// NESTED CLASS: represents a school announcement created by an administrator.
     public static class AnnouncementRecord {
         private String announcementID;
         private int adminID;
