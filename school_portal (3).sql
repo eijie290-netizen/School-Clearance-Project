@@ -71,69 +71,90 @@ INSERT INTO Announcement VALUES ('AN-001', 1, 'No Classes on Feb 21', 'There wil
 INSERT INTO Announcement VALUES ('AN-002', 1, 'Enrollment Schedule', 'Enrollment for the next term starts on March 3, 2026.', '2026-02-16');
 INSERT INTO Announcement VALUES ('AN-003', 1, 'Readmission Policy', 'Please review the readmission policy for school year 2026-2027.', '2026-02-12');
 -- REPORTS / QUERIES
+-- Displays the total number of students registered in the system.
 SELECT COUNT(*) AS "Total Students"
 FROM Student;
+-- Displays the total number of students with pending clearance.
 SELECT COUNT(*) AS "Pending Clearance"
 FROM Clearance WHERE Overall_Status = 'Pending';
+-- Displays the total number of pending or unpaid payment records.
 SELECT COUNT(*) AS "Unpaid Payments"
 FROM Payment WHERE Status = 'Pending';
+-- Displays the total number of announcements in the system.
 SELECT COUNT(*) AS "Total Announcements"
 FROM Announcement;
+-- Displays student details, including student ID, full name, course, year level, gender, email, and contact number.
 SELECT Student_ID AS "Student ID", CONCAT(First_Name, ' ', Last_Name) AS "Student Name", Course AS "Course",
     Year_Level AS "Year Level", Gender AS "Gender", Email AS "Email", Contact AS "Contact"
 FROM Student ORDER BY Last_Name ASC, First_Name ASC;
+-- Displays each student's guardian name, relationship, and guardian contact number.
 SELECT Student_ID AS "Student ID", CONCAT(First_Name, ' ', Last_Name) AS "Student Name",
     Guardian AS "Guardian", Relationship AS "Relationship", Guardian_Contact AS "Guardian Contact"
 FROM Student ORDER BY Last_Name ASC;
+-- Displays students whose addresses contain the word Bulacan.
 SELECT Student_ID AS "Student ID", CONCAT(First_Name, ' ', Last_Name) AS "Student Name", Address AS "Address"
 FROM Student WHERE Address LIKE '%Bulacan%' ORDER BY Last_Name ASC;
+-- Displays students enrolled in BSIT, BSN, or BSA.
 SELECT Student_ID AS "Student ID", CONCAT(First_Name, ' ', Last_Name) AS "Student Name", Course AS "Course"
 FROM Student WHERE Course IN ('BSIT', 'BSN', 'BSA') ORDER BY Course ASC, Last_Name ASC;
+-- Displays student names with last names in uppercase and email addresses in lowercase.
 SELECT Student_ID AS "Student ID", CONCAT(UPPER(Last_Name), ', ', First_Name) AS "Student Name",
     LOWER(Email) AS "Email"
 FROM Student ORDER BY Last_Name ASC;
+-- Displays the distinct courses represented among registered students.
 SELECT DISTINCT Course AS "Course"
 FROM Student ORDER BY Course ASC;
+-- Displays the number of students in each course, from highest count to lowest.
 SELECT Course AS "Course", COUNT(*) AS "No. of Students"
 FROM Student GROUP BY Course ORDER BY COUNT(*) DESC;
+-- Displays the number of students in each year level.
 SELECT Year_Level AS "Year Level", COUNT(*) AS "No. of Students"
 FROM Student GROUP BY Year_Level ORDER BY Year_Level ASC;
+-- Displays courses with more than one enrolled student.
 SELECT Course AS "Course", COUNT(*) AS "No. of Students"
 FROM Student GROUP BY Course HAVING COUNT(*) > 1 ORDER BY Course ASC;
+-- Displays each clearance record's office statuses, overall status, and progress percentage.
 SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Registrar_Status AS "Registrar",
     Library_Status AS "Library", Accounting_Status AS "Accounting", Clinic_Status AS "Clinic",
     Guidance_Status AS "Guidance", Student_Affairs_Status AS "Student Affairs", Overall_Status AS "Overall",
     Progress AS "Progress (%)"
 FROM Clearance ORDER BY Clearance_ID ASC;
+-- Displays clearance records whose overall status is Cleared.
 SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Progress AS "Progress (%)"
 FROM Clearance WHERE Overall_Status = 'Cleared';
+-- Displays pending clearance records ordered from lowest progress to highest.
 SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Progress AS "Progress (%)"
 FROM Clearance WHERE Overall_Status = 'Pending' ORDER BY Progress ASC;
+-- Displays pending clearance records with progress from 50% to 83%, ordered from highest progress to lowest.
 SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Progress AS "Progress (%)"
 FROM Clearance WHERE Overall_Status = 'Pending' AND Progress BETWEEN 50 AND 83 ORDER BY Progress DESC;
+-- Displays clearance records where either Accounting or Clinic status is Pending.
 SELECT Clearance_ID AS "Clearance ID", Student_ID AS "Student ID", Accounting_Status AS "Accounting",
     Clinic_Status AS "Clinic"
 FROM Clearance WHERE Accounting_Status = 'Pending' OR Clinic_Status = 'Pending' ORDER BY Student_ID ASC;
+-- Summarizes the number of students and average progress for each overall clearance status.
 SELECT Overall_Status AS "Overall Status", COUNT(*) AS "No. of Students", AVG(Progress) AS "Average Progress"
 FROM Clearance GROUP BY Overall_Status;
+-- Displays the lowest and highest clearance progress percentages.
 SELECT MIN(Progress) AS "Lowest Progress", MAX(Progress) AS "Highest Progress"
 FROM Clearance;
+-- Displays payment receipts with student IDs, descriptions, amounts, dates, and statuses, ordered by date.
 SELECT Receipt_No AS "Receipt No.", Student_ID AS "Student ID", Description AS "Description",
     Amount AS "Amount (PHP)", Payment_Date AS "Date", Status AS "Status"
 FROM Payment ORDER BY Payment_Date ASC;
+-- Displays payment records with amounts from PHP 1,800 to PHP 2,500, ordered from highest amount to lowest.
 SELECT Receipt_No AS "Receipt No.", Description AS "Description", Amount AS "Amount (PHP)"
 FROM Payment WHERE Amount BETWEEN 1800 AND 2500 ORDER BY Amount DESC;
+-- Summarizes the number of receipts, total amount, and average amount for each payment status.
 SELECT Status AS "Status", COUNT(*) AS "No. of Receipts", SUM(Amount) AS "Total Amount",
     AVG(Amount) AS "Average Amount"
 FROM Payment GROUP BY Status;
+-- Displays fee types whose total paid amount is greater than PHP 5,000.
 SELECT Description AS "Fee Type", SUM(Amount) AS "Total Collected"
 FROM Payment WHERE Status = 'Paid' GROUP BY Description HAVING SUM(Amount) > 5000 ORDER BY SUM(Amount) DESC;
+-- Displays each student's total pending payment balance, ordered from highest to lowest.
 SELECT Student_ID AS "Student ID", SUM(Amount) AS "Pending Balance"
 FROM Payment WHERE Status = 'Pending' GROUP BY Student_ID ORDER BY SUM(Amount) DESC;
+-- Displays students whose total pending payment balance exceeds PHP 2,000.
 SELECT Student_ID AS "Student ID", SUM(Amount) AS "Pending Balance"
 FROM Payment WHERE Status = 'Pending' GROUP BY Student_ID HAVING SUM(Amount) > 2000 ORDER BY SUM(Amount) DESC;
-SELECT SUM(Amount) AS "Total Payments", MIN(Amount) AS "Lowest Payment", MAX(Amount) AS "Highest Payment"
-FROM Payment;
-SELECT Announcement_ID AS "Announcement ID", Title AS "Title", Message AS "Message",
-    Date_Posted AS "Date Posted"
-FROM Announcement ORDER BY Date_Posted DESC;
