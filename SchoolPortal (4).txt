@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 // INHERITANCE: extends JFrame to make SchoolPortal a desktop window.
 public class SchoolPortal extends JFrame {
-// CONSTANTS: store reusable colors and fonts for consistent interface styling.
     private static final Color DARK_GREEN = new Color(22, 54, 105);
     private static final Color GREEN = new Color(35, 101, 190);
     private static final Color PALE = new Color(242, 247, 255);
@@ -19,26 +18,22 @@ public class SchoolPortal extends JFrame {
     private static final Font BOLD = new Font("SansSerif", Font.BOLD, 13);
 
     
-// CONSTANT: identifies the administrator attached to demo records.
     private static final int ADMIN_ID = 1;
 
-// COLLECTIONS: ArrayLists store student, clearance, payment, and announcement objects in memory.
+// ARRAYLIST OF OBJECTS: stores student, clearance, payment, and announcement objects in memory.
     private final ArrayList<Student> students = new ArrayList<>();
     private final ArrayList<Student.ClearanceRecord> clearances = new ArrayList<>();
     private final ArrayList<Student.PaymentRecord> payments = new ArrayList<>();
     private final ArrayList<Student.AnnouncementRecord> announcements = new ArrayList<>();
 
-// GUI LAYOUT: CardLayout switches between the portal's pages.
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel pagePanel = new JPanel(cardLayout);
 
-// TABLE MODELS: hold the rows and columns displayed in the portal's JTable components.
     private DefaultTableModel studentModel, clearanceModel, paymentModel, announcementModel;
     private JTable studentTable, clearanceTable, paymentTable, announcementTable;
     private JLabel dashboardStudents, dashboardPending, dashboardPayments, dashboardAnnouncements;
     private JLabel statusLabel;
 
-// CONSTRUCTOR: configures the main window, loads sample data, builds the UI, and displays it.
     public SchoolPortal() {
         setTitle("School Portal | Student and Clearance Management");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,7 +48,6 @@ public class SchoolPortal extends JFrame {
     }
 
    
-// SAMPLE DATA: fills the in-memory collections with demo students and related records.
     private void loadSampleData() {
         students.add(new Student("2024-001", "Maria", "Santos", "BSIT", "2nd Year",
                 "Female", "2005-04-12", "maria.santos@school.edu", "09171234567",
@@ -86,7 +80,6 @@ public class SchoolPortal extends JFrame {
                  "Male", "2002-02-18", "rico.salazar@school.edu", "09281234567",
                  "Pandi, Bulacan", "Teresa Salazar", "Mother", "09281112233"));
          
-// TWO-DIMENSIONAL ARRAY: stores each student's status for the six clearance offices.
                      String[][] clearanceStatuses = {
              {"Cleared", "Cleared", "Cleared", "Pending", "Cleared", "Cleared"},
              {"Cleared", "Cleared", "Cleared", "Cleared", "Cleared", "Pending"},
@@ -99,9 +92,7 @@ public class SchoolPortal extends JFrame {
              {"Pending", "Pending", "Pending", "Pending", "Pending", "Pending"},
              {"Cleared", "Cleared", "Cleared", "Cleared", "Cleared", "Pending"}
          };
-// ARRAY: lists the clearance offices used to assign each office status.
          String[] offices = {"Registrar", "Library", "Accounting", "Clinic", "Guidance", "Student Affairs"};
-// LOOP: creates a clearance record for each student in the list.
          for (int i = 0; i < students.size(); i++) {
 
             Student.ClearanceRecord c = new Student.ClearanceRecord(
@@ -135,7 +126,6 @@ public class SchoolPortal extends JFrame {
                 "Please review the readmission policy for school year 2026-2027.", "2026-02-12"));
     }
 
-// GUI METHOD: assembles the sidebar, top bar, and page panel.
     private void buildLayout() {
         JPanel root = new JPanel(new BorderLayout());
         root.setBackground(PALE);
@@ -159,7 +149,6 @@ public class SchoolPortal extends JFrame {
         setContentPane(root);
     }
 
-// GUI METHOD: creates navigation buttons for switching between portal pages.
     private JPanel buildSidebar() {
         JPanel side = new JPanel();
         side.setPreferredSize(new Dimension(295, 0));
@@ -187,7 +176,6 @@ public class SchoolPortal extends JFrame {
             button.setBackground(new Color(220, 235, 255));
             button.setFocusPainted(false);
             button.setBorder(new EmptyBorder(8, 17, 8, 12));
-// EVENT HANDLING + LAMBDA: opens the selected page when a navigation button is clicked.
             button.addActionListener(e -> showPage(item));
             side.add(button);
             side.add(Box.createVerticalStrut(8));
@@ -195,7 +183,6 @@ public class SchoolPortal extends JFrame {
         return side;
     }
 
-// GUI METHOD: creates the top header with the school name and school year.
     private JPanel buildTopbar() {
         JPanel top = new JPanel(new BorderLayout());
         top.setBackground(Color.WHITE);
@@ -210,7 +197,6 @@ public class SchoolPortal extends JFrame {
         return top;
     }
 
-// REUSABLE METHOD: creates a common page layout with a heading and subtitle.
     private JPanel pageBase(String title, String subtitle) {
         JPanel page = new JPanel(new BorderLayout(0, 15));
         page.setBackground(PALE);
@@ -232,7 +218,6 @@ public class SchoolPortal extends JFrame {
         return page;
     }
 
-// GUI METHOD: builds dashboard statistic cards and the recent-activities section.
     private JPanel buildDashboardPage() {
         JPanel page = pageBase("Dashboard", "Welcome back! Here is the current portal overview.");
         JPanel body = new JPanel(new BorderLayout(0, 18));
@@ -272,7 +257,6 @@ public class SchoolPortal extends JFrame {
         return page;
     }
 
-// REUSABLE GUI METHOD: creates one dashboard statistic card.
     private JPanel statCard(String title, JLabel number, String note) {
         JPanel card = new JPanel(new GridLayout(3, 1, 0, 5));
         card.setBackground(Color.WHITE);
@@ -286,7 +270,6 @@ public class SchoolPortal extends JFrame {
         return card;
     }
 
-// GUI METHOD: builds the student table and Add/Edit/Delete controls.
     private JPanel buildStudentsPage() {
         JPanel page = pageBase("Students", "Manage student details and guardian contact information.");
         studentModel = model("Student ID", "First Name", "Last Name", "Course", "Year Level",
@@ -316,7 +299,6 @@ public class SchoolPortal extends JFrame {
         return page;
     }
 
-// GUI METHOD: builds the clearance table and office-status update control.
     private JPanel buildClearancePage() {
         JPanel page = pageBase("Clearance", "Update each office requirement. A student is cleared when every office is cleared.");
         clearanceModel = model("Clearance ID", "Student ID", "Student Name", "Registrar",
@@ -345,7 +327,6 @@ public class SchoolPortal extends JFrame {
         return page;
     }
 
-// GUI METHOD: builds the payments table and payment actions.
     private JPanel buildPaymentsPage() {
         JPanel page = pageBase("Payments", "Track student fees, receipt numbers, payment dates, and payment status.");
         paymentModel = model("Receipt No.", "Student ID", "Student Name", "Description",
@@ -369,7 +350,6 @@ public class SchoolPortal extends JFrame {
         return page;
     }
 
-// GUI METHOD: builds the announcements table and new-announcement action.
     private JPanel buildAnnouncementsPage() {
         JPanel page = pageBase("Announcements", "Post school notices and reminders for students.");
         announcementModel = model("Announcement ID", "Title", "Message", "Date Posted", "Admin ID");
@@ -394,7 +374,6 @@ public class SchoolPortal extends JFrame {
         return page;
     }
 
-// GUI METHOD: builds report shortcuts for the portal's record sections.
     private JPanel buildReportsPage() {
         JPanel page = pageBase("Reports", "A quick summary based on the records currently loaded in this demo.");
         JPanel cards = new JPanel(new GridLayout(0, 1, 0, 14));
@@ -412,7 +391,6 @@ public class SchoolPortal extends JFrame {
         return page;
     }
 
-// REUSABLE GUI METHOD: creates a report card with a button to open its target page.
     private JPanel reportCard(String title, String desc, String target) {
         JPanel p = new JPanel(new BorderLayout(0, 8));
         p.setBackground(Color.WHITE);
@@ -446,7 +424,6 @@ public class SchoolPortal extends JFrame {
         return p;
     }
 
-// GUI METHOD: displays administrator profile information and account actions.
     private JPanel buildSettingsPage() {
         JPanel page = pageBase("Settings", "Basic profile and system information for the school administrator.");
         JPanel card = whitePanel("Administrator Profile");
@@ -537,7 +514,6 @@ public class SchoolPortal extends JFrame {
         page.add(card, BorderLayout.CENTER);
         return page;
     }
-// INPUT VALIDATION: collects and checks password fields before requesting a password change.
     private void changePasswordDialog(){
     JPasswordField currentPassword = new JPasswordField(20);
     JPasswordField newPassword = new JPasswordField(20);
@@ -579,7 +555,6 @@ public class SchoolPortal extends JFrame {
     }
    }
 
-// REUSABLE GUI METHOD: creates a white panel with a title.
     private JPanel whitePanel(String title) {
         JPanel p = new JPanel(new BorderLayout(0, 12));
         p.setBackground(Color.WHITE);
@@ -593,7 +568,6 @@ public class SchoolPortal extends JFrame {
         return p;
     }
 
-// REUSABLE GUI METHOD: creates a consistently styled button.
     private JButton greenButton(String text) {
         JButton b = new JButton(text);
         b.setFont(BOLD);
@@ -604,7 +578,6 @@ public class SchoolPortal extends JFrame {
         return b;
     }
 
-// VARARGS + ANONYMOUS CLASS: creates a table model from column names and prevents direct cell editing.
     private DefaultTableModel model(String... columns) {
         return new DefaultTableModel(columns, 0) {
             @Override public boolean isCellEditable(int row, int column) { return false; }
@@ -634,7 +607,6 @@ public class SchoolPortal extends JFrame {
         }
     }
 
-// REUSABLE GUI METHOD: applies table styling and wraps the table in a scroll pane.
     private JScrollPane tableScroll(JTable table) {
         table.setRowHeight(34);
         table.setFont(new Font("SansSerif", Font.PLAIN, 13));
@@ -655,58 +627,48 @@ public class SchoolPortal extends JFrame {
         return scroll;
     }
 
-// NAVIGATION METHOD: tells CardLayout which page to show and updates the window title.
     private void showPage(String name) {
         cardLayout.show(pagePanel, name);
         setTitle("Clearance Tracking Portal | " + name);
     }
 
-// SEARCH METHOD: returns the student matching the given ID, or null if none is found.
     private Student findStudent(String id) {
         for (Student s : students) if (s.getStudentID().equals(id)) return s;
         return null;
     }
 
-// SEARCH METHOD: finds the clearance record linked to a student ID.
     private Student.ClearanceRecord findClearance(String studentID) {
         for (Student.ClearanceRecord c : clearances) if (c.getStudentID().equals(studentID)) return c;
         return null;
     }
 
-    // ---------- auto numbering: one more than the highest existing number, so a deleted record never causes a duplicate ID ----------
-// STRING PROCESSING + EXCEPTION HANDLING: extracts a numeric suffix and safely handles invalid IDs.
     private int numberOf(String id, String prefix) {
         if (!id.startsWith(prefix)) return 0;
         try {
             return Integer.parseInt(id.substring(prefix.length()));
-// EXCEPTION HANDLING: displays an error if the payment amount is not a valid number.
         } catch (NumberFormatException ex) {
             return 0;
         }
     }
 
-// ID GENERATION: finds the highest existing clearance number and returns the next one.
     private String nextClearanceId() {
         int max = 0;
         for (Student.ClearanceRecord c : clearances) max = Math.max(max, numberOf(c.getClearanceID(), "CL-"));
         return String.format("CL-%03d", max + 1);
     }
 
-// ID GENERATION: creates the next payment receipt number.
     private String nextReceiptNo() {
         int max = 0;
         for (Student.PaymentRecord p : payments) max = Math.max(max, numberOf(p.getReceiptNo(), "2026-"));
         return "2026-" + String.format("%03d", max + 1);
     }
 
-// ID GENERATION: creates the next announcement ID.
     private String nextAnnouncementId() {
         int max = 0;
         for (Student.AnnouncementRecord a : announcements) max = Math.max(max, numberOf(a.getAnnouncementID(), "AN-"));
         return String.format("AN-%03d", max + 1);
     }
 
-// DATA DISPLAY UPDATE: rebuilds table rows and refreshes dashboard counts from the collections.
     private void refreshAllTables() {
         if (studentModel != null) {
             studentModel.setRowCount(0);
@@ -753,7 +715,6 @@ public class SchoolPortal extends JFrame {
         if (dashboardAnnouncements != null) dashboardAnnouncements.setText(String.valueOf(announcements.size()));
     }
 
-// CRUD / GUI: opens a form to add a student or edit an existing student's details.
     private void studentDialog(Student existing) {
         JTextField id = new JTextField(existing == null ? "" : existing.getStudentID());
         JTextField first = new JTextField(existing == null ? "" : existing.getFirstName());
@@ -769,7 +730,6 @@ public class SchoolPortal extends JFrame {
         JTextField relationship = new JTextField(existing == null ? "" : existing.getRelationship());
         JTextField guardianContact = new JTextField(existing == null ? "" : existing.getGuardianContact());
 
-// CONDITIONAL: pre-fills the form when editing an existing student.
         if (existing != null) {
             id.setText(existing.getStudentID());
             id.setEditable(false);
@@ -806,7 +766,6 @@ public class SchoolPortal extends JFrame {
             return;
         }
 
-// CONDITIONAL: creates a new Student and a matching initial clearance record.
         if (existing == null) {
             Student s = new Student(id.getText().trim(), first.getText().trim(), last.getText().trim(),
                     (String) course.getSelectedItem(), (String) year.getSelectedItem(),
@@ -832,14 +791,12 @@ public class SchoolPortal extends JFrame {
         refreshAllTables();
     }
 
-// UPDATE OPERATION: checks the selected row and opens the student edit form.
     private void editStudent() {
         int row = studentTable.getSelectedRow();
         if (row < 0) { message("Please select a student first."); return; }
         studentDialog(findStudent(String.valueOf(studentModel.getValueAt(row, 0))));
     }
 
-// DELETE OPERATION: asks for confirmation and removes the student and linked records.
     private void deleteStudent() {
         int row = studentTable.getSelectedRow();
         if (row < 0) { message("Please select a student first."); return; }
@@ -854,7 +811,6 @@ public class SchoolPortal extends JFrame {
         }
     }
 
-// UPDATE OPERATION: lets the user choose an office and change its clearance status.
     private void updateClearance() {
         int row = clearanceTable.getSelectedRow();
         if (row < 0) { message("Select a clearance record first."); return; }
@@ -873,7 +829,6 @@ public class SchoolPortal extends JFrame {
         refreshAllTables();
     }
 
-// CREATE OPERATION: collects payment details and adds a payment record.
     private void addPayment() {
         if (students.isEmpty()) { message("Add a student first."); return; }
         String[] options = new String[students.size()];
@@ -895,7 +850,6 @@ public class SchoolPortal extends JFrame {
                 JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION) return;
 
         try {
-// TYPE CONVERSION: converts the entered amount from text to a double.
             double value = Double.parseDouble(amount.getText().trim());
             if (value < 0) throw new NumberFormatException();
             payments.add(new Student.PaymentRecord(nextReceiptNo(), studentID, ADMIN_ID,
@@ -907,7 +861,6 @@ public class SchoolPortal extends JFrame {
         }
     }
 
-// UPDATE OPERATION: switches the selected payment between Paid and Pending.
     private void changePaymentStatus() {
         int row = paymentTable.getSelectedRow();
         if (row < 0) { message("Select a payment record first."); return; }
@@ -921,7 +874,6 @@ public class SchoolPortal extends JFrame {
         refreshAllTables();
     }
 
-// CREATE OPERATION: collects and saves a new school announcement.
     private void addAnnouncement() {
         JTextField title = new JTextField();
         JTextArea message = new JTextArea(5, 25);
@@ -944,7 +896,6 @@ public class SchoolPortal extends JFrame {
         refreshAllTables();
     }
 
-// REUSABLE HELPER METHOD: displays a standard information message dialog.
     private void message(String text) {
         JOptionPane.showMessageDialog(this, text, "Clearance Tracking Portal", JOptionPane.INFORMATION_MESSAGE);
     }
