@@ -4,11 +4,16 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+
 public class Main {
+// CONSTANT: sets the maximum number of allowed login attempts.
     private static final int MAX_LOGIN_ATTEMPTS = 3;
+// STATIC CLASS VARIABLE: counts failed login attempts across the login screen.
     private static int loginAttempts = 0;
+// ENCAPSULATION: private static field stores the current admin password for this demo.
     private static String adminPassword = "Borlasa123";
     
+// METHOD: checks the current password and updates it when it matches.
     public static boolean changeAdminPassword(String currentPassword, String newPassword){
         if(!adminPassword.equals(currentPassword)) return false;
         adminPassword = newPassword;
@@ -18,7 +23,9 @@ public class Main {
     private static final Color BLUE = new Color(8, 76, 166);
     private static final Color TEXT = Color.BLACK;
 
+// MAIN METHOD: entry point of the Java application.
     public static void main(String[] args) {
+// EVENT DISPATCH THREAD: starts Swing UI work on the appropriate GUI thread.
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -28,6 +35,7 @@ public class Main {
         });
     }
 
+// HELPER METHOD: sets default text colors for common Swing components.
     private static void setReadableDefaults() {
         UIManager.put("Label.foreground", Color.BLACK);
         UIManager.put("Button.foreground", Color.BLACK);
@@ -36,6 +44,7 @@ public class Main {
         UIManager.put("OptionPane.messageForeground", Color.BLACK);
     }
 
+// GUI METHOD: builds and displays the login window.
     private static void showLogin() {
         JFrame frame = new JFrame("San Isidro College - Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -124,14 +133,17 @@ public class Main {
         c.insets = new Insets(0, 0, 0, 0);
         card.add(login, c);
 
+// LAMBDA EXPRESSION: defines the login validation process for both button and Enter key.
         Runnable authenticate = () -> {
             String user = username.getText().trim();
             String pass = new String(password.getPassword());
             
+// CONDITIONAL: checks the username and password before opening the portal.
             if ("Ericka".equals(user) && adminPassword.equals(pass)) {
                 frame.dispose();
                 new SchoolPortal();
             } else {
+// COUNTER UPDATE: increases the failed-attempt count after an incorrect login.
                 loginAttempts++;
                 int remaining = MAX_LOGIN_ATTEMPTS-loginAttempts;
                 if (remaining>0){
@@ -149,6 +161,7 @@ public class Main {
                 }
             }
         };
+// EVENT HANDLING: runs the login validation when the Login button is clicked.
         login.addActionListener(e -> authenticate.run());
         password.addActionListener(e -> authenticate.run());
 
@@ -159,6 +172,7 @@ public class Main {
         username.requestFocusInWindow();
     }
 
+// REUSABLE HELPER METHOD: applies consistent formatting to a text field.
     private static void styleField(JTextField field) {
         field.setFont(new Font("SansSerif", Font.PLAIN, 15));
         field.setForeground(TEXT);
