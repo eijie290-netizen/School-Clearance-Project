@@ -8,7 +8,6 @@ public abstract class Person {
     private String email;
     private String contact;
     private String address;
-// CONSTRUCTOR: initializes the common details shared by Person subclasses.
     public Person(String firstName, String lastName, String email,
                   String contact, String address) {
         this.firstName = firstName;
