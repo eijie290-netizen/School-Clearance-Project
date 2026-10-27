@@ -1,6 +1,8 @@
 package Portal;
 
+// INHERITANCE: Student extends Person and reuses the common personal-information fields and methods.
 public class Student extends Person {
+// ENCAPSULATION: private fields keep student-specific data from being accessed directly outside this class.
     private String studentID;
     private String course;
     private String yearLevel;
@@ -13,6 +15,7 @@ public class Student extends Person {
                    String course, String yearLevel, String gender,
                    String birthDate, String email, String contact, String address,
                    String guardian, String relationship, String guardianContact) {
+// INHERITANCE: super(...) calls the Person constructor to initialize inherited personal details.
         super(firstName, lastName, email, contact, address);
         this.studentID = studentID;
         this.course = course;
@@ -23,6 +26,7 @@ public class Student extends Person {
         this.relationship = relationship;
         this.guardianContact = guardianContact;
     }
+// ENCAPSULATION: getter methods provide controlled access to private student fields.
     public String getStudentID() { return studentID; }
     public String getCourse() { return course; }
     public String getYearLevel() { return yearLevel; }
@@ -31,6 +35,7 @@ public class Student extends Person {
     public String getGuardian() { return guardian; }
     public String getRelationship() { return relationship; }
     public String getGuardianContact() { return guardianContact; }
+// ENCAPSULATION: setter methods allow student fields to be updated through methods.
     public void setStudentID(String studentID) { this.studentID = studentID; }
     public void setCourse(String course) { this.course = course; }
     public void setYearLevel(String yearLevel) { this.yearLevel = yearLevel; }
@@ -39,11 +44,13 @@ public class Student extends Person {
     public void setGuardian(String guardian) { this.guardian = guardian; }
     public void setRelationship(String relationship) { this.relationship = relationship; }
     public void setGuardianContact(String guardianContact) { this.guardianContact = guardianContact; }
+// METHOD OVERRIDING: the subclass provides its own implementation of the inherited abstract method.
     @Override
     public String getPersonType() {
         return "Student";
     }
 
+// NESTED CLASS: stores one student's clearance record and office statuses.
     public static class ClearanceRecord {
         private String clearanceID;
         private String studentID;
@@ -51,6 +58,7 @@ public class Student extends Person {
         private String registrarStatus, libraryStatus, accountingStatus;
         private String clinicStatus, guidanceStatus, studentAffairsStatus;
         private String overallStatus;
+// CONSTRUCTOR: creates a clearance record and initializes each office status as Pending.
          public ClearanceRecord(String clearanceID, String studentID, int adminID) {
              this.clearanceID = clearanceID;
              this.studentID = studentID;
@@ -69,6 +77,7 @@ public class Student extends Person {
          public String getGuidanceStatus() { return guidanceStatus; }
          public String getStudentAffairsStatus() { return studentAffairsStatus; }
          public String getOverallStatus() { return overallStatus; }
+// CONTROL FLOW: switch selects which office status to update based on the office name.
          public void setStatus(String office, String status) {
              switch (office) {
                  case "Registrar": registrarStatus = status; break;
@@ -81,6 +90,7 @@ public class Student extends Person {
              }
              updateOverallStatus();
          }
+// ENCAPSULATION / CALCULATION: calculates the percentage of offices marked Cleared.
          public int getProgress() {
              int complete = 0;
              String[] statuses = {registrarStatus, libraryStatus, accountingStatus,
@@ -90,11 +100,13 @@ public class Student extends Person {
              }
              return (complete * 100) / statuses.length;
          }
+// PRIVATE HELPER METHOD: updates the overall status based on the clearance progress.
          private void updateOverallStatus() {
              overallStatus = getProgress() == 100 ? "Cleared" : "Pending";
          }
     }
 
+// NESTED CLASS: represents a student's payment/receipt details.
     public static class PaymentRecord {
         private String receiptNo;
         private String studentID;
@@ -123,6 +135,7 @@ public class Student extends Person {
          public void setStatus(String status) { this.status = status; }
     }
 
+// NESTED CLASS: represents a school announcement created by an administrator.
     public static class AnnouncementRecord {
         private String announcementID;
         private int adminID;
